@@ -52,22 +52,22 @@ def tri_dico(d):
     return dico_trié
 
 def reduction_occurence(d,t):
-    """à_remplacer_par_ce_que_fait_la_fonction
-
-    Précondition : 
-    Exemple(s) :
-    $$$ 
-
-    """
     for i in range(t):
         d.popitem()
     return d
+
+def totale(f):
+    a=lecture_traitement(f)
+    b=only_caracter(a)
+    c=spliter(b)
+    d=liste_occurrences(c)
+    e=reduction_occurence_unique(d)
+    f=tri_dico(e)
+    g=reduction_occurence(f,100)
+    return g
     
     
-
-
-            
-l=[["baa",4],["a",1],["baba",2],["bba",3]]    
+     
  
     
 
