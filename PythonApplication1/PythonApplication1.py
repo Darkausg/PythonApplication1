@@ -46,11 +46,34 @@ def reduction_occurence_unique(d):
 
 tinyyy=reduction_occurence_unique(tinyy)
 
-def reduction_occurence_100(d):
-    ens=set()
-    for var in d:
-        ens.append
-  
+def tri_dico(d):
+    dico_trié = dict(sorted(d.items(), key=lambda item: item[1]))
+    "tiré de : https://www.datacamp.com/fr/tutorial/sort-a-dictionary-by-value-python"
+    return dico_trié
+
+def reduction_occurence(d,t):
+    """à_remplacer_par_ce_que_fait_la_fonction
+
+    Précondition : 
+    Exemple(s) :
+    $$$ 
+
+    """
+    for i in range(t):
+        d.popitem()
+    return d
+    
+    
+
 
             
-l=[["baa",4],["a",1],["baba",2],["bba",3]]   
+l=[["baa",4],["a",1],["baba",2],["bba",3]]    
+ 
+    
+
+
+    
+    
+    
+
+
