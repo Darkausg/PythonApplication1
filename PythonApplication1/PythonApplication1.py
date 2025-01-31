@@ -1,8 +1,12 @@
-f=open("tiny.txt","r").read()
+t=open("tiny.txt","r").read()
+
+
 
 def lecture_traitement(f):
-    pass
+    l=open(f,"r").read()
+    return l.lower()
     
+ti=open("tiny.txt","r").read().lower()
 
 def only_caracter(ori_text):
     letter ="azertyuiopqsdfghjklmwxcvbn"
@@ -14,8 +18,13 @@ def only_caracter(ori_text):
             text_treated = text_treated + " "
     return text_treated
 
-only_caracter(f)
+tin=only_caracter(open("tiny.txt","r").read().lower())
 
+def spliter(f):
+    return f.split()
+    
+
+tiny=spliter(tin)
 
 def liste_occurrences(l):
     res=dict()
@@ -29,13 +38,6 @@ def liste_occurrences(l):
     return res
 
 
-def parser(f):
-    ori_text = lecture_traitement(f)
-    text_treated = only_caracter(ori_text)
-    text_treated.split()
-    print(text_treated)
-    occurence = liste_occurrences(text_treated)
-    print(occurence)
 
   
 
