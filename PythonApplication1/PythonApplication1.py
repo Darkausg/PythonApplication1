@@ -61,7 +61,7 @@ def reduction_occurence(d,t):
         d.popitem()
     return d
 
-def parser(file_path):#traite un fichier à la fois
+def parser(file_path):#traite un fichier � la fois
     text_init=lecture_traitement(file_path)
     text_tr1=only_caracter(text_init)
     liste_mots=spliter(text_tr1)
@@ -72,7 +72,7 @@ def parser(file_path):#traite un fichier à la fois
     return [dico_f,liste_mots]
 
 # liste des elements a sauvegarder : liste_mots dans un fichier et un mot par ligne et dico_f dans un autre fichier
-#compute_dict(dico_f_filepath) et en clé ou valeur on donne sa position dans le fichier
+#compute_dict(dico_f_filepath) et en key ou valeur on donne sa position dans le fichier
 
 def save_parsed_data(dataSet,name):
     text_word = dataSet[0]
@@ -103,6 +103,38 @@ def compute_dict(l_mots):
 
 def compute_matrix(l_mots, k, d_index):
     matrix =  np.zeros((len(d_index),len(d_index)),dtype = int)
+
+    """
+    add (k+2)*"FF" at the begining and end of l_mot
+    """
+    #traite word that are not in the extremities of the list
+    #traite le début
+
+    #inverse la liste
+
+    #traite l'ex fin de liste
+
+
+    #traite le reste
+    index = k
+    for i in l_mots[k:-k]:                      #it should work, I tink, I really really  hope it work 
+        index=index-k
+        if i == "FF":
+            index = index+k+1
+            continue
+
+        for j in range(index,1+index+2*k):      #pourquoi il y a des boucles dans des boucles, pourquoi le code ne peut pas etre simple?
+            if j == (index+k):                  #on saute le mot qu'on analyse
+                continue
+            #check existence l_mots[j] dans d_index
+            if not (l_mots[j] in d_index):      #on saute si il n'est pas dans d_index
+                continue
+            #on rajoute le mot dans la matrice d'occurence
+            matrix[ d_index[i] , d_index[ l_mots[j] ] ] =  matrix[ d_index[i] , d_index[ l_mots[j] ] ] +1
+        
+           
+        index = index+k+1
+
 
     return 0
 
