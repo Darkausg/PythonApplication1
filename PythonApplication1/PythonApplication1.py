@@ -4,12 +4,13 @@ import sys
 import time
 
 sep_corpus = False
-knbf = 0
+nbr_corpus = 0
 redu_ocu = 100
 k_voisin = 3
 init_type = 2
 filler_liste = " FF " * k_voisin
 nbr_corpus = 1
+compress = True
 """
 METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
 METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
@@ -43,80 +44,137 @@ tout autre init_type --> fin du programme
 """
 def init(init_type):
     match init_type:
-        case init_type if isinstance(init_type, int):
+        case init_type if not (isinstance(init_type, int)):
             sys.exit()
         case 0:#default
             a=1
         case 1:#customisable during exec
-            b=1
-            init_custo()
+            l = init_custo()
         case 2:#for testing
             c=1
         case _:#case default
             sys.exit()
-    return 0#voir si on change le return
+    return l#voir si on change le return
 
 
 
 def init_custo():
     loop= True
     miniLoop = True
+    name_corpus_added = False
     while loop:
-        print("tapez 1 si vous voulez modifier le nombre de corpus \u00E0 traiter, par d\u00E9faut 1 seul corpus est trait\u00E9 ")
+        print(" \n "*150)
+        print("Tapez 0 pour mettre fin \u00E0 la customisation.")
         print("\n")
-        print("explanation 1 ")
+        print("\n")        
+        print("Tapez 1 si vous voulez modifier le nombre de corpus \u00E0 traiter, par d\u00E9faut 1 seul corpus est trait\u00E9.")
         print("\n")
-        print("explanation 1 ")
         print("\n")
-        print("explanation 1 ")
+        print("Tapez 2 pour saisir le(s) nom(s) des corpus.")
         print("\n")
-        print("explanation 1 ")
+        print("Il est obligatoire de saisir le(s) nom(s) des corpus.")
+        print("\n")
+        print("Si vous changez la quantit\u00E9 de corpus apr\u00E8s avoir saisi le nom de(s) corpus, veuillez les saisir \u00E0 nouveau.")
+        print("\n")
+        print("\n")
+        print("Tapez 3 pour que les corpus soient trait\u00E9 de mani\u00E8re s\u00E9par\u00E9 avec 1 matrice par corpus \u00E0 la fin du programmme.")
+        print("\n")
+        print("\n")
+        print("Tapez 4 pour que les corpus soient rassembl\u00E9 en 1 seul corpus, ce qui donnera 1 seul matrice \u00E0 la fin du programme.")
+        print("\n")
+        if not compress:
+            print("Actuellement les corpus sont trait\u00E9s de mani\u00E8re s\u00E9par\u00E9.")
+        else:
+            print("Actuellement les corpus sont rassembl\u00E9s en 1 seul corpus.")
+            if sep_corpus:
+                print("")#expliquer ce que fait sep_corpus si True
+            else:
+                print("")#expliquer ce que fait sep_corpus si False
+        #
+        print("\n")
+        print("\n")
+        print("Tapez 5 pour d\u00E9cider du nombre de mot les plus fr\u00E9quent qui seront retir\u00E9s.")
+        print("\n")
         print("\n")
         temp = input("choisissez le param\u00E8tre \u00E0 modifier : ")
-        if (temp.str.isdigit()):
+        if (temp.isdigit()):
             choice = int(temp)
         match choice:
-            case 1:#nombre et nom des corpus a analyser
+
+
+            case 1:#nombre des corpus a analyser
+                if name_corpus_added:
+                    name_corpus_added = False
+                    if nbr_corpus>1:
+                        l.clear
+                    else:
+                        l=""
                 while miniLoop:
                     temp = input("tapez la quantit\u00E9 de corpus que vous souhait\u00E9 traiter : ")
                     if (temp.str.isdigit()):
                         nbr_corpus = int(temp)
                         if nbr_corpus>0:
                             break
-                    print("entrer un entier , sinon soit \u00E7a n'a pas de sens, \u00E7 c'est trop compliqu\u00E9 a impl\u00E9menter")
+                    print("entrer un entier sup\u00E9rieur \u00E0 0, sinon soit \u00E7a n'a pas de sens, \u00E7 c'est trop compliqu\u00E9 a impl\u00E9menter")
+                    print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
                     time.sleep(5)
 
-            case 2:#est ce que les corpus sont a analyser separement ou est ce qu'il doivent comprimmer en 1 corpus
+
+            case 3:#est ce que les corpus sont a analyser separement ou est ce qu'il doivent comprimmer en 1 corpus
+                compress = False
+
+            case 4:#si plusieurs corpus rassemble dans 1 seul, est ce qu'ils doivent êtres separe par le filler
+                compress = True
+                temp = input("Si vous voulez que ..... pressez Y sinon pressez N")#expliquer ce que fait sep_corpus
+                match temp:
+                    case "Y":
+                        sep_corpus = True
+                    case "N":
+                        sep_corpus = False
+                    case _:
+                        print("")#exprimmer que sep_corpus est inchangé
+
+            case 5:#la quantite des mots les plus frequent à retirer
                 a=0
 
-            case 3:#si plusieurs corpus rassemble dans 1 seul, est ce qu'ils doivent êtres separe par le filler
-                a=0
-
-            case 4:#la quantite des mots les plus frequent à retirer
-                a=0
-
-            case 5:# choisir le k-voisin
+            case 6:# choisir le k-voisin
                 a=0
 
 
-            case 6:#(potentiellemnt) si on optimise la matrice
+            case 7:#(potentiellemnt) si on optimise la matrice
                 a=0
 
-            case 7:#(potentiellement)lecture automatique et applications du traitements pour tout les fichiers texte 
+            case 8:#(potentiellement)lecture automatique et applications du traitements pour tout les fichiers texte 
                 a=0
 
-            case 8:
-                a=0
+            case 2:#nom des corpus
+                print("si vous entrez des nom de fichiers qui n'existe pas, le programme va stopper son \u00E9x\u00E9cution avec une erreur file not found\n")
+                print("auquel cas l'arr\u00EAt du programme est de votre faute et non pas celle des d\u00E9vellopeurs")
+                print("le nombre de corpus \u00E0 saisir est : " + str(nbr_corpus))
+                if nbr_corpus==1:
+                    l = input("veuillez saisir le nom du fichier sans le .txt : ") + ".txt"
+                else:
+                    l=[]
+                    for i in range(nbr_corpus):
+                        l.append(input("veuillez saisir le nom du fichier sans le .txt : ") + ".txt")
+                name_corpus_added = True
+
 
 
             case 0:#fin de la customisation
                 print("\u00EAtes-vous s\u00FBr d'avoir finis de saisir tous les param\u00E8tres? \n")
-                if int(input("si oui tapez 10 : ")) == 10:
-                    loop = False
+                if name_corpus_added:
+                    temp=input("si oui tapez 10 : ")
+                    if (temp.isdigit() and int(temp) == 10):
+                        loop = False
+                else:
+                    print("le nom de(s) corpus n'a pas \u00E9t\u00E9 d\u00E9finie, veuillez saisir le nom de(s) corpus")
+                    print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
+                    time.sleep(5)
             case _:
                 a=0
 
-    return 0
+    return l
 
 
 
@@ -181,8 +239,8 @@ def parser(file_path):#traite un fichier a la fois
     text_init=""
 
 
-    if (knbf>0):# si on en traite plusieurs
-        for i in range(0,knbf+1):
+    if (nbr_corpus>1):# si on en traite plusieurs
+        for i in range(0,nbr_corpus):
             text_init=text_init + lecture_traitement(file_path[i])
             
             if sep_corpus:#si on separe les textes entre eux
@@ -307,6 +365,7 @@ c.update(d)
 the two lines do the same thing, the first line is only after version 3.9
 """
 
+init_custo()
 #print(compute_dict(parser("tiny.txt")[0]))
 #print("rfe")
 save_parsed_data(parser("hayku.txt"),"hayku")
