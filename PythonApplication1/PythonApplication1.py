@@ -1,10 +1,30 @@
 # t=open("tiny.txt","r").read()
 import numpy as np
+import sys
+import time
 
 sep_corpus = False
 knbf = 0
 redu_ocu = 100
 k_voisin = 3
+init_type = 2
+filler_liste = " FF " * k_voisin
+nbr_corpus = 1
+"""
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
+"""
+
 """
 valeur definit dans init:
 le(s) nom(s) des corpus a analyser
@@ -16,9 +36,88 @@ le k-voisins
 lecture automatique et applications du traitements pour tout les fichiers texte 
 deroulements du programmes par default ou customisation (init_type)
 le k+1 filler fait de "FF"
+init_type =0 --> mode default
+init_type = 1 --> mode customisable
+init_type = 2 --> mode test (a retirer quand on rend le TP ou rendre impossible d'acces)
+tout autre init_type --> fin du programme
 """
 def init(init_type):
-    pass
+    match init_type:
+        case init_type if isinstance(init_type, int):
+            sys.exit()
+        case 0:#default
+            a=1
+        case 1:#customisable during exec
+            b=1
+            init_custo()
+        case 2:#for testing
+            c=1
+        case _:#case default
+            sys.exit()
+    return 0#voir si on change le return
+
+
+
+def init_custo():
+    loop= True
+    miniLoop = True
+    while loop:
+        print("tapez 1 si vous voulez modifier le nombre de corpus \u00E0 traiter, par d\u00E9faut 1 seul corpus est trait\u00E9 ")
+        print("\n")
+        print("explanation 1 ")
+        print("\n")
+        print("explanation 1 ")
+        print("\n")
+        print("explanation 1 ")
+        print("\n")
+        print("explanation 1 ")
+        print("\n")
+        temp = input("choisissez le param\u00E8tre \u00E0 modifier : ")
+        if (temp.str.isdigit()):
+            choice = int(temp)
+        match choice:
+            case 1:#nombre et nom des corpus a analyser
+                while miniLoop:
+                    temp = input("tapez la quantit\u00E9 de corpus que vous souhait\u00E9 traiter : ")
+                    if (temp.str.isdigit()):
+                        nbr_corpus = int(temp)
+                        if nbr_corpus>0:
+                            break
+                    print("entrer un entier , sinon soit \u00E7a n'a pas de sens, \u00E7 c'est trop compliqu\u00E9 a impl\u00E9menter")
+                    time.sleep(5)
+
+            case 2:#est ce que les corpus sont a analyser separement ou est ce qu'il doivent comprimmer en 1 corpus
+                a=0
+
+            case 3:#si plusieurs corpus rassemble dans 1 seul, est ce qu'ils doivent êtres separe par le filler
+                a=0
+
+            case 4:#la quantite des mots les plus frequent à retirer
+                a=0
+
+            case 5:# choisir le k-voisin
+                a=0
+
+
+            case 6:#(potentiellemnt) si on optimise la matrice
+                a=0
+
+            case 7:#(potentiellement)lecture automatique et applications du traitements pour tout les fichiers texte 
+                a=0
+
+            case 8:
+                a=0
+
+
+            case 0:#fin de la customisation
+                print("\u00EAtes-vous s\u00FBr d'avoir finis de saisir tous les param\u00E8tres? \n")
+                if int(input("si oui tapez 10 : ")) == 10:
+                    loop = False
+            case _:
+                a=0
+
+    return 0
+
 
 
 def lecture_traitement(f):
@@ -191,7 +290,7 @@ def compute_matrix(l_mots, k, d_index):
 #
  
 def main():
-    init(1)
+    init(2)
     
 
     return 0
