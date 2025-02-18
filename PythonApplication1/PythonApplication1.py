@@ -1,6 +1,22 @@
 # t=open("tiny.txt","r").read()
 import numpy as np
 
+sep_corpus = False
+knbf = 0
+redu_ocu = 100
+k_voisin = 3
+"""
+valeur definit dans init:
+le(s) nom(s) des corpus a analyser
+est ce que on rassemble les corpus en un seul corpus
+si ils sont dans un corpus, est ce que on les separe par k+1 "FF"
+la quantite des mots les plus frequent à retirer
+le k-voisins
+(potentiellemnt) si on optimise la matrice
+lecture automatique et applications du traitements pour tout les fichiers texte 
+deroulements du programmes par default ou customisation (init_type)
+le k+1 filler fait de "FF"
+"""
 def init(init_type):
     pass
 
@@ -59,17 +75,39 @@ def reduction_occurence(d,t):
         return d
     for i in range(t):
         d.popitem()
+
     return d
 
-def parser(file_path):#traite un fichier � la fois
-    text_init=lecture_traitement(file_path)
+def parser(file_path):#traite un fichier a la fois
+    text_init=""
+
+
+    if (knbf>0):# si on en traite plusieurs
+        for i in range(0,knbf+1):
+            text_init=text_init + lecture_traitement(file_path[i])
+            
+            if sep_corpus:#si on separe les textes entre eux
+                for i in range(0,k_voisin+1):
+                    text_init = text_init+" FF "
+
+    else:#si on traite 1 corpus
+        text_init=text_init + lecture_traitement(file_path)
+    #
+
+    
     text_tr1=only_caracter(text_init)
     liste_mots=spliter(text_tr1)
+
+    #on cree le dico
     dico_mot_init=liste_occurrences(liste_mots)
     dico_tr_1=reduction_occurence_unique(dico_mot_init)
+    if sep_corpus:
+        del dico_tr_1['FF']
     dico_tr2=tri_dico(dico_tr_1)    
-    dico_f=reduction_occurence(dico_tr2,100)
+    dico_f=reduction_occurence(dico_tr2,redu_ocu)
     return [dico_f,liste_mots]
+
+
 
 # liste des elements a sauvegarder : liste_mots dans un fichier et un mot par ligne et dico_f dans un autre fichier
 #compute_dict(dico_f_filepath) et en key ou valeur on donne sa position dans le fichier
@@ -88,8 +126,21 @@ def save_parsed_data(dataSet,name):
     pass
 
 def read_saved_data(name):
-    #
-    pass
+    l_mot = []
+    dico=dict()
+    n=0
+    with open("01"+name+"ensemble.txt","r") as l:#liste de mots
+        for i in l:
+            l_mot.append(i.strip())
+    with open("02"+name+"dico.txt","r") as d:#dico
+        for i in d:
+            dico[i.strip()] = n
+            n+=1
+    return[dico,l_mot]
+
+
+
+
 
 def compute_dict(l_mots):
     res = dict()
@@ -103,23 +154,21 @@ def compute_dict(l_mots):
 
 def compute_matrix(l_mots, k, d_index):
     matrix =  np.zeros((len(d_index),len(d_index)),dtype = int)
-
+    nb_mot = len(l_mots)
     """
     add (k+2)*"FF" at the begining and end of l_mot
     """
-    #traite word that are not in the extremities of the list
-    #traite le début
+    filler = []
+    for i in range(k):
+        filler.append("FF")
 
-    #inverse la liste
-
-    #traite l'ex fin de liste
-
-
-    #traite le reste
+    #l_mots.insert(0,filler)
+    #l_mots.append(filler)
+    l_mots = filler + l_mots + filler
     index = k
     for i in l_mots[k:-k]:                      #it should work, I tink, I really really  hope it work 
         index=index-k
-        if i == "FF":
+        if i == "FF" or (not (i in d_index)):
             index = index+k+1
             continue
 
@@ -134,16 +183,18 @@ def compute_matrix(l_mots, k, d_index):
         
            
         index = index+k+1
-
-
-    return 0
+    
+    return (matrix/nb_mot)
 
 
 
 #
  
 def main():
-    pass
+    init(1)
+    
+
+    return 0
 
 
     
@@ -157,6 +208,9 @@ c.update(d)
 the two lines do the same thing, the first line is only after version 3.9
 """
 
-print(compute_dict(parser("tiny.txt")[0]))
-print("rfe")
+#print(compute_dict(parser("tiny.txt")[0]))
+#print("rfe")
 save_parsed_data(parser("hayku.txt"),"hayku")
+data = read_saved_data("hayku")
+print(compute_matrix(data[1],3,data[0]))
+#transformer en matrice à trous
