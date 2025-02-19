@@ -3,14 +3,9 @@ import numpy as np
 import sys
 import time
 
-sep_corpus = False
-nbr_corpus = 0
-redu_ocu = 100
-k_voisin = 3
-init_type = 2
-filler_liste = " FF " * k_voisin
-nbr_corpus = 1
-compress = True
+init_type = 2 #FF
+
+
 """
 METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
 METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
@@ -43,30 +38,65 @@ init_type = 2 --> mode test (a retirer quand on rend le TP ou rendre impossible 
 tout autre init_type --> fin du programme
 """
 def init(init_type):
+
+    param = []
+    sep_corpus = False #0
+    redu_ocu = 100 #1
+    k_voisin = 3 #2
+    filler_liste = " FF " * k_voisin #3
+    nbr_corpus = 1 #4
+    compress = True #5
+
+    param.append(sep_corpus)
+    param.append(redu_ocu)
+    param.append(k_voisin)
+    param.append(filler_liste)
+    param.append(nbr_corpus)
+    param.append(compress)
+
     match init_type:
         case init_type if not (isinstance(init_type, int)):
             sys.exit()
+
+
         case 0:#default
-            a=1
+            return param
+
+
         case 1:#customisable during exec
-            l = init_custo()
+            return (init_custo(param))
+
+
         case 2:#for testing
             c=1
+
+
         case _:#case default
             sys.exit()
-    return l#voir si on change le return
+
+    #something
+    return param#on change le return
 
 
 
-def init_custo():
+def init_custo(param):
     loop= True
     miniLoop = True
     name_corpus_added = False
+
+    sep_corpus = param[0] #0
+    redu_ocu = param[1] #1
+    k_voisin = param[2] #2
+    filler_liste = param[3] #3
+    nbr_corpus = param[4] #4
+    compress = param[5] #5
+    
+
     while loop:
         print(" \n "*150)
         print("Tapez 0 pour mettre fin \u00E0 la customisation.")
         print("\n")
-        print("\n")        
+        #print("\n")        
         print("Tapez 1 si vous voulez modifier le nombre de corpus \u00E0 traiter, par d\u00E9faut 1 seul corpus est trait\u00E9.")
         print("\n")
         print("\n")
@@ -96,11 +126,19 @@ def init_custo():
         print("Tapez 5 pour d\u00E9cider du nombre de mot les plus fr\u00E9quent qui seront retir\u00E9s.")
         print("\n")
         print("\n")
+        print("Tapez 6 pour d\u00E9cider du k-contexte.")
+        print("\n")
+        #print("\n")
         temp = input("choisissez le param\u00E8tre \u00E0 modifier : ")
         if (temp.isdigit()):
             choice = int(temp)
+        else:
+            choice = 2512654
         match choice:
 
+            case 2512654:
+                print("saisie incorrect, veuillez attendre 5 secondes avant de pouvoir continuer\n")
+                time.sleep(5)
 
             case 1:#nombre des corpus a analyser
                 if name_corpus_added:
@@ -111,7 +149,7 @@ def init_custo():
                         l=""
                 while miniLoop:
                     temp = input("tapez la quantit\u00E9 de corpus que vous souhait\u00E9 traiter : ")
-                    if (temp.str.isdigit()):
+                    if (temp.isdigit()):
                         nbr_corpus = int(temp)
                         if nbr_corpus>0:
                             break
@@ -125,7 +163,7 @@ def init_custo():
 
             case 4:#si plusieurs corpus rassemble dans 1 seul, est ce qu'ils doivent êtres separe par le filler
                 compress = True
-                temp = input("Si vous voulez que ..... pressez Y sinon pressez N")#expliquer ce que fait sep_corpus
+                temp = input("Si vous voulez que ..... pressez Y sinon pressez N : ")#expliquer ce que fait sep_corpus
                 match temp:
                     case "Y":
                         sep_corpus = True
@@ -135,10 +173,31 @@ def init_custo():
                         print("")#exprimmer que sep_corpus est inchangé
 
             case 5:#la quantite des mots les plus frequent à retirer
-                a=0
+                print("choisissez la quantit\u00E9 des mots les plus fr\u00E9quants \u00E0 retirer.\nAttention, si cette quantit\u00E9 exc\u00E9de la quantit\u00E9 de mots diff\u00E9rents aucun r\u00E9duction ne sera faite.\n")
+                print("actuellement les " + str(redu_ocu) + " mots les plus fr\u00E9quants sont retir\u00E9\n")
+                temp = input("veuillez saisir la quantit\u00E9 : ")
+                if (temp.isdigit()):
+                    redu_ocu = int(temp)
+                    if redu_ocu<0:
+                        redu_ocu=0
+                        print("\nRetirer un nombre n\u00E9gatif de mots n'a aucun sens\nveuillez attendre 5 secondes avant de pouvoir continuer.")
+                        time.sleep(5)
+                else:
+                    print("\nRetirer une quantit\u00E9 qui n'est pas un nombre n'as pas de sens \nveuillez attendre 5 secondes avant de pouvoir continuer.")
+                    time.sleep(5)
 
             case 6:# choisir le k-voisin
-                a=0
+                while miniLoop:
+                    print("vous pouvez saisir un k-contexte qui est plus grand que le nombre de mots dans le corpus, le résultat sera le m\u00EAme que si vous avez demandez un k-contextez \u00E9gal \u00E0 la taille du corpus\n")
+                    print("Actuellement, le k-contexte est de : " + str(k_voisin) + " \n")
+                    temp = input("tapez le k-contexte: ")
+                    if (temp.isdigit()):
+                        k_voisin = int(temp)
+                        if nbr_corpus>0:
+                            break
+                    print("entrer un entier sup\u00E9rieur \u00E0 0, sinon soit \u00E7a n'a pas de sens")
+                    print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
+                    time.sleep(5)
 
 
             case 7:#(potentiellemnt) si on optimise la matrice
@@ -171,10 +230,20 @@ def init_custo():
                     print("le nom de(s) corpus n'a pas \u00E9t\u00E9 d\u00E9finie, veuillez saisir le nom de(s) corpus")
                     print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
                     time.sleep(5)
+            #
             case _:
                 a=0
-
-    return l
+    #
+    
+    param.clear()
+    param.append(sep_corpus)
+    param.append(redu_ocu)
+    param.append(k_voisin)
+    param.append(filler_liste)
+    param.append(nbr_corpus)
+    param.append(compress)
+    param.append(l)
+    return param
 
 
 
@@ -235,20 +304,20 @@ def reduction_occurence(d,t):
 
     return d
 
-def parser(file_path):#traite un fichier a la fois
+def parser(param):#traite un fichier a la fois
     text_init=""
+    
 
-
-    if (nbr_corpus>1):# si on en traite plusieurs
-        for i in range(0,nbr_corpus):
-            text_init=text_init + lecture_traitement(file_path[i])
+    if (param[4]>1):# si on en traite plusieurs / nbr_corpus
+        for i in range(0,param[4]): #nbr_corpus
+            text_init=text_init + lecture_traitement(param[6][i])
             
-            if sep_corpus:#si on separe les textes entre eux
-                for i in range(0,k_voisin+1):
+            if param[0]:#si on separe les textes entre eux/ sep_corpus
+                for i in range(0,param[2]):
                     text_init = text_init+" FF "
 
     else:#si on traite 1 corpus
-        text_init=text_init + lecture_traitement(file_path)
+        text_init=text_init + lecture_traitement(param[6])
     #
 
     
@@ -258,10 +327,10 @@ def parser(file_path):#traite un fichier a la fois
     #on cree le dico
     dico_mot_init=liste_occurrences(liste_mots)
     dico_tr_1=reduction_occurence_unique(dico_mot_init)
-    if sep_corpus:
+    if param[0]:#sep_corpus
         del dico_tr_1['FF']
     dico_tr2=tri_dico(dico_tr_1)    
-    dico_f=reduction_occurence(dico_tr2,redu_ocu)
+    dico_f=reduction_occurence(dico_tr2,param[1])#redu_ocu
     return [dico_f,liste_mots]
 
 
@@ -348,9 +417,10 @@ def compute_matrix(l_mots, k, d_index):
 #
  
 def main():
-    init(2)
-    
-
+    control = init(1)
+    print("param in main= ")
+    print(control)
+    sys.exit()
     return 0
 
 
@@ -365,8 +435,8 @@ c.update(d)
 the two lines do the same thing, the first line is only after version 3.9
 """
 
-init_custo()
-#print(compute_dict(parser("tiny.txt")[0]))
+main()
+#print("vous pouvez saisir un k-contexte qui est plus grand que le nombre de mots dans le corpus, le résultat sera le m\u00EAme que si vous avez demandez un k-contextez \u00E9gal \u00E0 la taille du corpus\n")
 #print("rfe")
 save_parsed_data(parser("hayku.txt"),"hayku")
 data = read_saved_data("hayku")
