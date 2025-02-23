@@ -53,6 +53,8 @@ def init(init_type):
     param.append(filler_liste)
     param.append(nbr_corpus)
     param.append(compress)
+    if init_type==0:
+        param.append("hayku.txt")
 
     match init_type:
         case init_type if not (isinstance(init_type, int)):
@@ -427,14 +429,14 @@ def main():
     dataSet1 = parser(control) 
     #mettre une demande pour verifier si on sauvegarde dans init_custom
     if True:
-        save_parsed_data(dataSet1,"dataSet")# génerer un nom dans init custom ou a partir des parametres
+        save_parsed_data(dataSet1,"dataSet0")# génerer un nom dans init custom ou a partir des parametres
     #est ce que on lit a partir d'un fichier ou est ce que on a deja la liste de mot et le dico en memoire
     if True:
         temp=compute_dict(dataSet1[0])
         dataSet1[0].clear
         dataSet1[0]=temp.copy()
     else:
-        dataSet1= read_saved_data("")#trouver ce qu'on met en parametre
+        dataSet1= read_saved_data("dataSet0")#trouver ce qu'on met en parametre
     matrix_result = compute_matrix(dataSet1[0], control[2], dataSet1[1])
 
     sys.exit()
