@@ -368,17 +368,17 @@ def read_saved_data(name):
 
 
 
-def compute_dict(l_mots):
+def compute_dict(dico):
     res = dict()
     j=0
-    for i in l_mots:
+    for i in dico:
         res[i]=j
         j=j+1
     return res
 
 
 
-def compute_matrix(l_mots, k, d_index):
+def compute_matrix(d_index, k, l_mots):
     matrix =  np.zeros((len(d_index),len(d_index)),dtype = int)
     nb_mot = len(l_mots)
     """
@@ -420,10 +420,34 @@ def main():
     control = init(1)
     print("param in main= ")
     print(control)
+    if not control[5]:#si non comprimme
+        if not (control[4]==1):#si il y a plus d'1 corpus
+            #do something
+            return 0
+    dataSet1 = parser(control) 
+    #mettre une demande pour verifier si on sauvegarde dans init_custom
+    if True:
+        save_parsed_data(dataSet1,"dataSet")# génerer un nom dans init custom ou a partir des parametres
+    #est ce que on lit a partir d'un fichier ou est ce que on a deja la liste de mot et le dico en memoire
+    if True:
+        temp=compute_dict(dataSet1[0])
+        dataSet1[0].clear
+        dataSet1[0]=temp.copy()
+    else:
+        dataSet1= read_saved_data("")#trouver ce qu'on met en parametre
+    matrix_result = compute_matrix(dataSet1[0], control[2], dataSet1[1])
+
     sys.exit()
     return 0
 
-
+"""
+    sep_corpus = False #0
+    redu_ocu = 100 #1
+    k_voisin = 3 #2
+    filler_liste = " FF " * k_voisin #3
+    nbr_corpus = 1 #4
+    compress = True #5
+"""
     
 a = {"a":1}
 b={"a":2,"c":6}
@@ -436,9 +460,8 @@ the two lines do the same thing, the first line is only after version 3.9
 """
 
 main()
-#print("vous pouvez saisir un k-contexte qui est plus grand que le nombre de mots dans le corpus, le résultat sera le m\u00EAme que si vous avez demandez un k-contextez \u00E9gal \u00E0 la taille du corpus\n")
 #print("rfe")
-save_parsed_data(parser("hayku.txt"),"hayku")
-data = read_saved_data("hayku")
-print(compute_matrix(data[1],3,data[0]))
+#save_parsed_data(parser("hayku.txt"),"hayku")
+#data = read_saved_data("hayku")
+#print(compute_matrix(data[0],3,data[1]))
 #transformer en matrice à trous
