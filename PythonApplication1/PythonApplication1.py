@@ -22,15 +22,15 @@ METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
 """
 
 """
-valeur definit dans init:
+valeurs definies dans init:
 le(s) nom(s) des corpus a analyser
 est ce que on rassemble les corpus en un seul corpus
 si ils sont dans un corpus, est ce que on les separe par k+1 "FF"
-la quantite des mots les plus frequent à retirer
+la quantite des mots les plus frequents à retirer
 le k-voisins
 (potentiellemnt) si on optimise la matrice
 lecture automatique et applications du traitements pour tout les fichiers texte 
-deroulements du programmes par default ou customisation (init_type)
+deroulement du programme par default ou customisation (init_type)
 le k+1 filler fait de "FF"
 init_type =0 --> mode default
 init_type = 1 --> mode customisable
@@ -43,7 +43,7 @@ def init(init_type):
     sep_corpus = False #0
     redu_ocu = 100 #1
     k_voisin = 3 #2
-    filler_liste = " FF " * k_voisin #3
+    filler_liste = " scpmeansecurecontainprotect " * k_voisin #3
     nbr_corpus = 1 #4
     compress = True #5
 
@@ -55,6 +55,7 @@ def init(init_type):
     param.append(compress)
     if init_type==0:
         param.append("hayku.txt")
+        param.append("default")
 
     match init_type:
         case init_type if not (isinstance(init_type, int)):
@@ -69,19 +70,19 @@ def init(init_type):
             return (init_custo(param))
 
 
-        case 2:#for testing
-            c=1
-
-
         case _:#case default
             sys.exit()
 
-    #something
-    return param#on change le return
+    #something pour forcer l'indentation
+    return param 
 
 
 
 def init_custo(param):
+    """
+    permet de customiser les parametres du programme sans avoir a modifier les valeurs dans le code
+
+    """
     loop= True
     miniLoop = True
     name_corpus_added = False
@@ -109,13 +110,13 @@ def init_custo(param):
         print("Si vous changez la quantit\u00E9 de corpus apr\u00E8s avoir saisi le nom de(s) corpus, veuillez les saisir \u00E0 nouveau.")
         print("\n")
         print("\n")
-        print("Tapez 3 pour que les corpus soient trait\u00E9 de mani\u00E8re s\u00E9par\u00E9 avec 1 matrice par corpus \u00E0 la fin du programmme.")
+        print("Tapez 3 pour que les corpus soient trait\u00E9s de mani\u00E8re s\u00E9par\u00E9e avec 1 matrice par corpus \u00E0 la fin du programmme.")
         print("\n")
         print("\n")
-        print("Tapez 4 pour que les corpus soient rassembl\u00E9 en 1 seul corpus, ce qui donnera 1 seul matrice \u00E0 la fin du programme.")
+        print("Tapez 4 pour que les corpus soient rassembl\u00E9s en 1 seul corpus, ce qui donnera 1 seule matrice \u00E0 la fin du programme.")
         print("\n")
         if not compress:
-            print("Actuellement les corpus sont trait\u00E9s de mani\u00E8re s\u00E9par\u00E9.")
+            print("Actuellement les corpus sont trait\u00E9s de mani\u00E8re s\u00E9par\u00E9e.")
         else:
             print("Actuellement les corpus sont rassembl\u00E9s en 1 seul corpus.")
             if sep_corpus:
@@ -125,7 +126,7 @@ def init_custo(param):
         #
         print("\n")
         print("\n")
-        print("Tapez 5 pour d\u00E9cider du nombre de mot les plus fr\u00E9quent qui seront retir\u00E9s.")
+        print("Tapez 5 pour d\u00E9cider du nombre de mots les plus fr\u00E9quents qui seront retir\u00E9s.")
         print("\n")
         print("\n")
         print("Tapez 6 pour d\u00E9cider du k-contexte.")
@@ -139,7 +140,7 @@ def init_custo(param):
         match choice:
 
             case 2512654:
-                print("saisie incorrect, veuillez attendre 5 secondes avant de pouvoir continuer\n")
+                print("saisie incorrecte, veuillez attendre 5 secondes avant de pouvoir continuer\n")
                 time.sleep(5)
 
             case 1:#nombre des corpus a analyser
@@ -150,20 +151,20 @@ def init_custo(param):
                     else:
                         l=""
                 while miniLoop:
-                    temp = input("tapez la quantit\u00E9 de corpus que vous souhait\u00E9 traiter : ")
+                    temp = input("tapez la quantit\u00E9 de corpus que vous souhaitez traiter : ")
                     if (temp.isdigit()):
                         nbr_corpus = int(temp)
                         if nbr_corpus>0:
                             break
-                    print("entrer un entier sup\u00E9rieur \u00E0 0, sinon soit \u00E7a n'a pas de sens, \u00E7 c'est trop compliqu\u00E9 a impl\u00E9menter")
+                    print("entrer un entier sup\u00E9rieur \u00E0 0, sinon soit \u00E7a n'a pas de sens, soit c'est trop compliqu\u00E9 \u00E0 impl\u00E9menter")
                     print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
                     time.sleep(5)
 
 
-            case 3:#est ce que les corpus sont a analyser separement ou est ce qu'il doivent comprimmer en 1 corpus
+            case 3:#est ce que les corpus sont a analyser separement ou est ce qu'il doivent comprimer en 1 corpus
                 compress = False
 
-            case 4:#si plusieurs corpus rassemble dans 1 seul, est ce qu'ils doivent êtres separe par le filler
+            case 4:#si plusieurs corpus sont rassemble dans 1 seul, est ce qu'ils doivent être separes par le filler
                 compress = True
                 temp = input("Si vous voulez que ..... pressez Y sinon pressez N : ")#expliquer ce que fait sep_corpus
                 match temp:
@@ -172,17 +173,17 @@ def init_custo(param):
                     case "N":
                         sep_corpus = False
                     case _:
-                        print("")#exprimmer que sep_corpus est inchangé
+                        print("")#exprimer que sep_corpus est inchangé
 
-            case 5:#la quantite des mots les plus frequent à retirer
-                print("choisissez la quantit\u00E9 des mots les plus fr\u00E9quants \u00E0 retirer.\nAttention, si cette quantit\u00E9 exc\u00E9de la quantit\u00E9 de mots diff\u00E9rents aucun r\u00E9duction ne sera faite.\n")
-                print("actuellement les " + str(redu_ocu) + " mots les plus fr\u00E9quants sont retir\u00E9\n")
+            case 5:#la quantite des mots les plus frequents à retirer
+                print("choisissez la quantit\u00E9 des mots les plus fr\u00E9quents \u00E0 retirer. Attention, si cette quantit\u00E9 exc\u00E9de la quantit\u00E9 de mots diff\u00E9rents aucune r\u00E9duction ne sera faite.\n")
+                print("actuellement les " + str(redu_ocu) + " mots les plus fr\u00E9quents sont retir\u00E9\n")
                 temp = input("veuillez saisir la quantit\u00E9 : ")
                 if (temp.isdigit()):
                     redu_ocu = int(temp)
                     if redu_ocu<0:
                         redu_ocu=0
-                        print("\nRetirer un nombre n\u00E9gatif de mots n'a aucun sens\nveuillez attendre 5 secondes avant de pouvoir continuer.")
+                        print("\nRetirer un nombre n\u00E9gatif de mots n'a aucun sens \nveuillez attendre 5 secondes avant de pouvoir continuer.")
                         time.sleep(5)
                 else:
                     print("\nRetirer une quantit\u00E9 qui n'est pas un nombre n'as pas de sens \nveuillez attendre 5 secondes avant de pouvoir continuer.")
@@ -190,12 +191,14 @@ def init_custo(param):
 
             case 6:# choisir le k-voisin
                 while miniLoop:
-                    print("vous pouvez saisir un k-contexte qui est plus grand que le nombre de mots dans le corpus, le résultat sera le m\u00EAme que si vous avez demandez un k-contextez \u00E9gal \u00E0 la taille du corpus\n")
+                    print("vous pouvez saisir un k-contexte qui est plus grand que le nombre de mots dans le corpus, le résultat sera le m\u00EAme que si vous avez demand\u00E9 un k-contexte \u00E9gal \u00E0 la taille du corpus\n")
                     print("Actuellement, le k-contexte est de : " + str(k_voisin) + " \n")
                     temp = input("tapez le k-contexte: ")
                     if (temp.isdigit()):
                         k_voisin = int(temp)
-                        if nbr_corpus>0:
+                        filler_liste = ""
+                        filler_liste = " scpmeansecurecontainprotect "
+                        if k_voisin>0:
                             break
                     print("entrer un entier sup\u00E9rieur \u00E0 0, sinon soit \u00E7a n'a pas de sens")
                     print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
@@ -209,8 +212,8 @@ def init_custo(param):
                 a=0
 
             case 2:#nom des corpus
-                print("si vous entrez des nom de fichiers qui n'existe pas, le programme va stopper son \u00E9x\u00E9cution avec une erreur file not found\n")
-                print("auquel cas l'arr\u00EAt du programme est de votre faute et non pas celle des d\u00E9vellopeurs")
+                print("si vous entrez des noms de fichiers qui n'existent pas, le programme va stopper son \u00E9x\u00E9cution avec une erreur file not found\n")
+                print("auquel cas l'arr\u00EAt du programme est de votre faute et non pas celle des d\u00E9veloppeurs")
                 print("le nombre de corpus \u00E0 saisir est : " + str(nbr_corpus))
                 if nbr_corpus==1:
                     l = input("veuillez saisir le nom du fichier sans le .txt : ") + ".txt"
@@ -223,13 +226,13 @@ def init_custo(param):
 
 
             case 0:#fin de la customisation
-                print("\u00EAtes-vous s\u00FBr d'avoir finis de saisir tous les param\u00E8tres? \n")
+                print("\u00EAtes-vous s\u00FBr d'avoir fini de saisir tous les param\u00E8tres? \n")
                 if name_corpus_added:
                     temp=input("si oui tapez 10 : ")
                     if (temp.isdigit() and int(temp) == 10):
                         loop = False
                 else:
-                    print("le nom de(s) corpus n'a pas \u00E9t\u00E9 d\u00E9finie, veuillez saisir le nom de(s) corpus")
+                    print("le nom de(s) corpus n'a pas \u00E9t\u00E9 d\u00E9fini, veuillez saisir le nom de(s) corpus")
                     print("veuillez attendre 5 secondes avant de pouvoir r\u00E9essayer de donner une quantit\u00E9")
                     time.sleep(5)
             #
@@ -245,17 +248,24 @@ def init_custo(param):
     param.append(nbr_corpus)
     param.append(compress)
     param.append(l)
+    param.append("placeholder")
     return param
 
 
 
 def lecture_traitement(f):
+    """
+    lit le contenu d'un fichier dont le nom est donne par le parametre et renvoie tout le texte en minuscules
+    """
     l=open(f,"r").read()
     return l.lower()
     
-# ti=open("tiny.txt","r").read().lower()
+
 
 def only_caracter(ori_text):
+    """
+    prend un texte en parametre et remplace tous les caracteres qui ne sont pas des lettres par des espaces
+    """
     letter ="azertyuiopqsdfghjklmwxcvbn"
     text_treated = ""
     for i in ori_text:
@@ -265,15 +275,15 @@ def only_caracter(ori_text):
             text_treated = text_treated + " "
     return text_treated
 
-# tin=only_caracter(open("tiny.txt","r").read().lower())
 
-def spliter(f):
-    return f.split()
-    
 
-# tiny=spliter(tin)
+
 
 def liste_occurrences(l):
+    """
+    prend une liste de mots l en entree et compte le nombre de fois que chaque mot apparait dans cette liste. 
+    Elle retourne un dictionnaire res ou les cles sont les mots et les valeurs sont les occurrences de ces mots.
+    """
     res=dict()
     for i in l:
         if not i in res:
@@ -282,29 +292,45 @@ def liste_occurrences(l):
             res[i]+=1
     return res
 
-# tinyy=liste_occurrences(tiny)
+
 
 def reduction_occurence_unique(d):
+    """
+    prend en entree un dictionnaire (d) ou les cles sont des mots et les valeurs sont le nombre d'occurrences de chaque mot. 
+    retourne un nouveau dictionnaire (res) qui ne contient que les mots apparaissant plus d'une fois dans le dictionnaire d'origine.
+    """
     res=dict()
     for i in d:
         if not d[i]==1:
             res[i]=d[i]
     return res
 
-#tinyyy=reduction_occurence_unique(tinyy)
 
-def tri_dico(d):
-    dico_trie = dict(sorted(d.items(), key=lambda item: item[1]))
+
+def tri_dico(d,ascending):
+    """
+    trie un dictionnaire d en fonction de ses valeurs, en ordre croissant ou decroissant, selon la valeur du booléen ascending
+    retourne le dico trie
+    """
+    dico_trie = dict(sorted(d.items(), key=lambda item: item[1],reverse=ascending))
     "from : https://www.datacamp.com/fr/tutorial/sort-a-dictionary-by-value-python"
     return dico_trie
 
+
+
 def reduction_occurence(d,t):
+    """
+    reduction_occurence prend en entrée un dictionnaire d et un entier t supérieur à 0. 
+    reduction_occurence supprime t éléments du dictionnaire, à moins que le dictionnaire ne contienne moins de t éléments, et elle renvoie ce resultat
+    """
     if len(d)<t:
         return d
     for i in range(t):
         d.popitem()
 
     return d
+
+
 
 def parser(param):#traite un fichier a la fois
     text_init=""
@@ -316,7 +342,7 @@ def parser(param):#traite un fichier a la fois
             
             if param[0]:#si on separe les textes entre eux/ sep_corpus
                 for i in range(0,param[2]):
-                    text_init = text_init+" FF "
+                    text_init = text_init+" scpmeansecurecontainprotect "
 
     else:#si on traite 1 corpus
         text_init=text_init + lecture_traitement(param[6])
@@ -324,20 +350,21 @@ def parser(param):#traite un fichier a la fois
 
     
     text_tr1=only_caracter(text_init)
-    liste_mots=spliter(text_tr1)
+    liste_mots=text_tr1.split()
 
     #on cree le dico
     dico_mot_init=liste_occurrences(liste_mots)
     dico_tr_1=reduction_occurence_unique(dico_mot_init)
     if param[0]:#sep_corpus
-        del dico_tr_1['FF']
-    dico_tr2=tri_dico(dico_tr_1)    
+        del dico_tr_1["scpmeansecurecontainprotect"]
+    dico_tr2=tri_dico(dico_tr_1,True)    
     dico_f=reduction_occurence(dico_tr2,param[1])#redu_ocu
-    return [dico_f,liste_mots]
+    dico_f2=tri_dico(dico_f,False)
+    return [dico_f2,liste_mots]
 
 
 
-# liste des elements a sauvegarder : liste_mots dans un fichier et un mot par ligne et dico_f dans un autre fichier
+# liliste des elements a sauvegarder : liste_mots dans un fichier et un mot par ligne et dico_f dans un autre fichier
 #compute_dict(dico_f_filepath) et en key ou valeur on donne sa position dans le fichier
 
 def save_parsed_data(dataSet,name):
@@ -371,6 +398,10 @@ def read_saved_data(name):
 
 
 def compute_dict(dico):
+    """
+    compute_dict renvoie un nouveau dictionnaire (res) 
+    res associe a chaque cle du dictionnaire d'origine (dico) un numero d'index
+    """
     res = dict()
     j=0
     for i in dico:
@@ -384,27 +415,27 @@ def compute_matrix(d_index, k, l_mots):
     matrix =  np.zeros((len(d_index),len(d_index)),dtype = int)
     nb_mot = len(l_mots)
     """
-    add (k+2)*"FF" at the begining and end of l_mot
+    add (k+2)*"SCPmeansecurecontainprotect" at the begining and end of l_mot pour ne pas avoir a faire de cas special pour les extremites de la liste des mots
     """
     filler = []
     for i in range(k):
-        filler.append("FF")
+        filler.append("SCPmeansecurecontainprotect")
 
     #l_mots.insert(0,filler)
     #l_mots.append(filler)
     l_mots = filler + l_mots + filler
     index = k
-    for i in l_mots[k:-k]:                      #it should work, I tink, I really really  hope it work 
+    for i in l_mots[k:-k]:                      #it should work, I think, I really really  hope it work 
         index=index-k
-        if i == "FF" or (not (i in d_index)):
+        if (i == "SCPmeansecurecontainprotect") or (i =="scpmeansecurecontainprotect") or (not(i in d_index)) :
             index = index+k+1
             continue
 
         for j in range(index,1+index+2*k):      #pourquoi il y a des boucles dans des boucles, pourquoi le code ne peut pas etre simple?
-            if j == (index+k):                  #on saute le mot qu'on analyse
+            if j == (index+k) :                  #on saute le mot qu'on analyse
                 continue
             #check existence l_mots[j] dans d_index
-            if not (l_mots[j] in d_index):      #on saute si il n'est pas dans d_index
+            if not ( l_mots[j] in d_index ) :      #on saute si il n'est pas dans d_index
                 continue
             #on rajoute le mot dans la matrice d'occurence
             matrix[ d_index[i] , d_index[ l_mots[j] ] ] =  matrix[ d_index[i] , d_index[ l_mots[j] ] ] +1
@@ -412,54 +443,58 @@ def compute_matrix(d_index, k, l_mots):
            
         index = index+k+1
     
-    return (matrix/nb_mot)
+    return ((matrix/nb_mot).astype(np.float32)) #some
 
 
-
-#
- 
-def main():
-    control = init(1)
-    print("param in main= ")
-    print(control)
-    if not control[5]:#si non comprimme
-        if not (control[4]==1):#si il y a plus d'1 corpus
-            #do something
-            return 0
-    dataSet1 = parser(control) 
-    #mettre une demande pour verifier si on sauvegarde dans init_custom
-    if True:
-        save_parsed_data(dataSet1,"dataSet0")# génerer un nom dans init custom ou a partir des parametres
-    #est ce que on lit a partir d'un fichier ou est ce que on a deja la liste de mot et le dico en memoire
-    if True:
-        temp=compute_dict(dataSet1[0])
-        dataSet1[0].clear
-        dataSet1[0]=temp.copy()
-    else:
-        dataSet1= read_saved_data("dataSet0")#trouver ce qu'on met en parametre
-    matrix_result = compute_matrix(dataSet1[0], control[2], dataSet1[1])
-
-    sys.exit()
-    return 0
 
 """
+    parametre initialise dans la fonction init
+    le #nombre represente l'indice dans la liste control
     sep_corpus = False #0
     redu_ocu = 100 #1
     k_voisin = 3 #2
     filler_liste = " FF " * k_voisin #3
     nbr_corpus = 1 #4
     compress = True #5
+    nom des corpus #6
+
 """
+ 
+def main():
+    control = init(1)#initialise tous les parametres
+    print("param in main= ")
+    print(control)
+
+
+    if not control[5]:#si non comprime en un bloc de text
+        if not (control[4]==1):#si il y a plus d'1 corpus
+            #do something
+            return 0
+    dataSet1 = parser(control) 
+    #mettre une demande pour verifier si on sauvegarde dans init_custom
+    if True:
+        save_parsed_data(dataSet1,control[7])# control[7] aucune idee de comment le definir, c'est un nom pour les fichiers
+
+
+    #est ce que on lit a partir d'un fichier ou est ce que on a deja la liste de mot et le dico en memoire
+    if True:
+        temp=compute_dict(dataSet1[0])
+        dataSet1[0].clear
+        dataSet1[0]=temp.copy()
+    else:
+        dataSet1= read_saved_data(control[7])# mettre cette ligne de code après le print(control) dans un if False; fonctionnalite non devellope
+
+
+    #calcule la matrice
+    matrix_result = compute_matrix(dataSet1[0], control[2], dataSet1[1])
+    print(matrix_result)
+
+    sys.exit()
+    return 0
+
+
     
-a = {"a":1}
-b={"a":2,"c":6}
-c = {"r":0}
-d={"r":7,"g":6}
-"""
-print((a|b))# ou alors c.update(d)
-c.update(d)
-the two lines do the same thing, the first line is only after version 3.9
-"""
+
 
 main()
 #print("rfe")
