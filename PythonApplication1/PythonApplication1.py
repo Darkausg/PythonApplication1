@@ -1,9 +1,8 @@
-# t=open("tiny.txt","r").read()
+import os
 import numpy as np
 import sys
 import time
-
-init_type = 2 #FF
+import pickle
 
 
 """
@@ -25,7 +24,7 @@ METTRE DANS LE README LA VERSION DE PYTHON DOIT ETRE SUPERIEUR A 3.10
 valeurs definies dans init:
 le(s) nom(s) des corpus a analyser
 est ce que on rassemble les corpus en un seul corpus
-si ils sont dans un corpus, est ce que on les separe par k+1 "FF"
+si ils sont dans un corpus, est ce que on les separe par k+1 " scpmeansecurecontainprotect "
 la quantite des mots les plus frequents à retirer
 le k-voisins
 (potentiellemnt) si on optimise la matrice
@@ -54,7 +53,8 @@ def init(init_type):
     param.append(nbr_corpus)
     param.append(compress)
     if init_type==0:
-        param.append("hayku.txt")
+        param[4]=4
+        param.append(["movies_text.txt","soap_text.txt","tv_text.txt","wiki_text.txt"])
         param.append("default")
 
     match init_type:
@@ -66,14 +66,14 @@ def init(init_type):
             return param
 
 
-        case 1:#customisable during exec
+        case 1:#permet customisation pendant exececution
             return (init_custo(param))
 
 
         case _:#case default
             sys.exit()
 
-    #something pour forcer l'indentation
+
     return param 
 
 
@@ -228,7 +228,8 @@ def init_custo(param):
             case 0:#fin de la customisation
                 print("\u00EAtes-vous s\u00FBr d'avoir fini de saisir tous les param\u00E8tres? \n")
                 if name_corpus_added:
-                    temp=input("si oui tapez 10 : ")
+                    name_repertoir = input("donnez le nom du fichier de la matrice (ce nom doit \u00EAtre valide pour un nom de fichier sur l'OS que vous utiliser) : ")
+                    temp=input("Pour mettre fin \u00E0 la saisie des param\u00E8tres, tapez 10 : ")
                     if (temp.isdigit() and int(temp) == 10):
                         loop = False
                 else:
@@ -248,7 +249,7 @@ def init_custo(param):
     param.append(nbr_corpus)
     param.append(compress)
     param.append(l)
-    param.append("placeholder")
+    param.append(name_repertoir)
     return param
 
 
@@ -332,66 +333,83 @@ def reduction_occurence(d,t):
 
 
 
-def parser(param):#traite un fichier a la fois
-    text_init=""
+def parser(params):
+    initial_text=""
     
 
-    if (param[4]>1):# si on en traite plusieurs / nbr_corpus
-        for i in range(0,param[4]): #nbr_corpus
-            text_init=text_init + lecture_traitement(param[6][i])
+    if (params[4]>1):# if processing multiple corpora | params[4] <=> nbr_corpus
+        for i in range(0,params[4]): #nbr_corpus
+            initial_text=initial_text + lecture_traitement(params[6][i])
             
-            if param[0]:#si on separe les textes entre eux/ sep_corpus
-                for i in range(0,param[2]):
-                    text_init = text_init+" scpmeansecurecontainprotect "
+            if params[0]:  # if separating texts from each other | params[0] <=> sep_corpus
+                for i in range(0,params[2]):
+                    initial_text = initial_text+" scpmeansecurecontainprotect "
 
-    else:#si on traite 1 corpus
-        text_init=text_init + lecture_traitement(param[6])
+    else: # if processing 1 corpus
+        initial_text=initial_text + lecture_traitement(params[6])
     #
 
+    # Convert text to only contain specified characters
+    processed_text=only_caracter(initial_text)
+    words_list=processed_text.split()
     
-    text_tr1=only_caracter(text_init)
-    liste_mots=text_tr1.split()
+    # Create initial word occurrence dictionary
+    initial_word_dict=liste_occurrences(words_list)
 
-    #on cree le dico
-    dico_mot_init=liste_occurrences(liste_mots)
-    dico_tr_1=reduction_occurence_unique(dico_mot_init)
-    if param[0]:#sep_corpus
-        del dico_tr_1["scpmeansecurecontainprotect"]
-    dico_tr2=tri_dico(dico_tr_1,True)    
-    dico_f=reduction_occurence(dico_tr2,param[1])#redu_ocu
-    dico_f2=tri_dico(dico_f,False)
-    return [dico_f2,liste_mots]
+    # Remove words with a single occurrence
+    unique_occurences_dict=reduction_occurence_unique(initial_word_dict)
+
+    if params[0]:#sep_corpus
+        del unique_occurences_dict["scpmeansecurecontainprotect"]
 
 
+    # Sort the dictionary in descending order of occurrences
+    sorted_dict_desc=tri_dico(unique_occurences_dict,True)
+    
+    # Reduce the dictionary to a specific number of occurrences
+    reduced_dict=reduction_occurence(sorted_dict_desc,params[1])#redu_ocu
 
-# liliste des elements a sauvegarder : liste_mots dans un fichier et un mot par ligne et dico_f dans un autre fichier
-#compute_dict(dico_f_filepath) et en key ou valeur on donne sa position dans le fichier
+    # Sort the dictionary in ascending order of occurrences
+    final_sorted_dict=tri_dico(reduced_dict,False)
+
+    return [final_sorted_dict,words_list]
+
+
+
+
+
 
 def save_parsed_data(dataSet,name):
+    """
+    sauvegarde les donnes dans des fichiers
+    """
     text_word = dataSet[0]
-    liste_word = dataSet[1]
+    word_list = dataSet[1]
     with open("01"+name+"ensemble.txt","w") as l:
-        for i in liste_word:
+        for i in word_list:
             l.write(i+"\n")
     with open("02"+name+"dico.txt","w") as d:
         for i in text_word.keys():
             d.write(i+"\n")
-    with open("03Repertoire.txt","a") as r:
-        r.write(name+"ensemble.txt\n"+name+"dico.txt\n")
+    with open("03" + name + "repertoire.txt","a") as r:
+        r.write(name)
     pass
 
 def read_saved_data(name):
-    l_mot = []
+    """
+    lit les ficchiers qui ont ete sauvegarde par save_parsed_data
+    """
+    list_word = []
     dico=dict()
     n=0
     with open("01"+name+"ensemble.txt","r") as l:#liste de mots
         for i in l:
-            l_mot.append(i.strip())
+            list_word.append(i.strip())
     with open("02"+name+"dico.txt","r") as d:#dico
         for i in d:
             dico[i.strip()] = n
             n+=1
-    return[dico,l_mot]
+    return[dico,list_word]
 
 
 
@@ -420,30 +438,41 @@ def compute_matrix(d_index, k, l_mots):
     filler = []
     for i in range(k):
         filler.append("SCPmeansecurecontainprotect")
+    
 
     #l_mots.insert(0,filler)
     #l_mots.append(filler)
     l_mots = filler + l_mots + filler
     index = k
-    for i in l_mots[k:-k]:                      #it should work, I think, I really really  hope it work 
+    for i in l_mots[k:-k]:                      
+        
+        #progress indicator
+        if (index == (int(len(l_mots)/2)) ):
+            print("On est au milieu")
+        if (index == (int(len(l_mots)/3)) ):
+            print("On est au tier")
+        if (index == (2* (int(len(l_mots)/3)) ) ):
+            print("On est au deux tier")
+
+
         index=index-k
-        if (i == "SCPmeansecurecontainprotect") or (i =="scpmeansecurecontainprotect") or (not(i in d_index)) :
+        if (i == "SCPmeansecurecontainprotect") or (i =="scpmeansecurecontainprotect") or (not(i in d_index)) : #the if-statement skips the current iterations if certain conditions are met
             index = index+k+1
             continue
 
-        for j in range(index,1+index+2*k):      #pourquoi il y a des boucles dans des boucles, pourquoi le code ne peut pas etre simple?
+        for j in range(index,1+index+2*k):      
             if j == (index+k) :                  #on saute le mot qu'on analyse
                 continue
             #check existence l_mots[j] dans d_index
             if not ( l_mots[j] in d_index ) :      #on saute si il n'est pas dans d_index
                 continue
-            #on rajoute le mot dans la matrice d'occurence
+            #on rajoute la presence mot dans la matrice d'occurence
             matrix[ d_index[i] , d_index[ l_mots[j] ] ] =  matrix[ d_index[i] , d_index[ l_mots[j] ] ] +1
         
            
         index = index+k+1
-    
-    return ((matrix/nb_mot).astype(np.float32)) #some
+    print("matrice finie")
+    return ( matrix.astype(np.float32)/(np.float32(nb_mot)) ) #with some little luck, this is faster than return ( ( matrix/nb_mot ).astype(np.float32) )
 
 
 
@@ -465,29 +494,32 @@ def main():
     print("param in main= ")
     print(control)
 
+    if os.path.exists("03" + control[7] + "repertoire.txt"):
+        dataSet1= read_saved_data(control[7])
+    else:
+        if not control[5]:#si non comprime en un bloc de text
+            if not (control[4]==1):#si il y a plus d'1 corpus
+                #do something
+                return 0
+        dataSet1 = parser(control)
+        
+        #mettre une demande pour verifier si on sauvegarde dans init_custom
+        if True:
+            save_parsed_data(dataSet1,control[7])# control[7] aucune idee de comment le definir, c'est une partie du nom pour les fichiers
 
-    if not control[5]:#si non comprime en un bloc de text
-        if not (control[4]==1):#si il y a plus d'1 corpus
-            #do something
-            return 0
-    dataSet1 = parser(control) 
-    #mettre une demande pour verifier si on sauvegarde dans init_custom
-    if True:
-        save_parsed_data(dataSet1,control[7])# control[7] aucune idee de comment le definir, c'est un nom pour les fichiers
-
-
-    #est ce que on lit a partir d'un fichier ou est ce que on a deja la liste de mot et le dico en memoire
-    if True:
+        #on s'assure que le dictionnaire est bien au format que l'on souhaite utiliser
         temp=compute_dict(dataSet1[0])
         dataSet1[0].clear
         dataSet1[0]=temp.copy()
-    else:
-        dataSet1= read_saved_data(control[7])# mettre cette ligne de code après le print(control) dans un if False; fonctionnalite non devellope
+
 
 
     #calcule la matrice
     matrix_result = compute_matrix(dataSet1[0], control[2], dataSet1[1])
-    print(matrix_result)
+
+    #on dump la matrice dans un fichier
+    with open("04" + control[7] + "matrix.pkl", "wb") as f:
+        pickle.dump(matrix_result, f)
 
     sys.exit()
     return 0
@@ -497,8 +529,3 @@ def main():
 
 
 main()
-#print("rfe")
-#save_parsed_data(parser("hayku.txt"),"hayku")
-#data = read_saved_data("hayku")
-#print(compute_matrix(data[0],3,data[1]))
-#transformer en matrice à trous
